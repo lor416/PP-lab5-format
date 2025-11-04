@@ -44,6 +44,7 @@ class File {
         List<String> lines = new ArrayList<>();
         int start = 0;
         boolean red = true;
+        boolean last = false;
         while (start < words.size()) {
             StringBuilder line = new StringBuilder();
             int currentWidth = width;
@@ -104,33 +105,49 @@ class File {
             if (wordCount == 0) {
                 break;
             }
-            line.append(words.get(start));
-            if (wordCount > 1) {
-                int totalSpaces = currentWidth - sum;
-                int spacesBetweenWords = totalSpaces / (wordCount - 1);
-                int extraSpaces = totalSpaces % (wordCount - 1);
+            int nextIndex = start + wordCount;
+            if (nextIndex >= words.size() || words.get(nextIndex).equals("\n")) {
+                last = true;
+            }
+            if (last) {
+                // Для последней строки - просто добавляем слова с обычными пробелами
+                line.append(words.get(start));
                 for (int i = 1; i < wordCount; i++) {
-                    // обычный пробел + дополнительные пробелы для выравнивания
-                    line.append(" ");
-                    for (int j = 0; j < spacesBetweenWords; j++) {
-                        line.append(" ");
-                    }
-                    if (i <= extraSpaces) {
-                        line.append(" ");
-                    }
-                    line.append(words.get(start + i));
+                    line.append(" ").append(words.get(start + i));
                 }
             }
-            while (line.length() < width) {
-                line.append(" ");
+            else{
+                line.append(words.get(start));
+                if (wordCount > 1) {
+                    int totalSpaces = currentWidth - sum;
+                    int spacesBetweenWords = totalSpaces / (wordCount - 1);
+                    int extraSpaces = totalSpaces % (wordCount - 1);
+                    for (int i = 1; i < wordCount; i++) {
+                        // обычный пробел + дополнительные пробелы для выравнивания
+                        line.append(" ");
+                        for (int j = 0; j < spacesBetweenWords; j++) {
+                            line.append(" ");
+                        }
+                        if (i <= extraSpaces) {
+                            line.append(" ");
+                        }
+                        line.append(words.get(start + i));
+                    }
+                }
+                while (line.length() < width) {
+                    line.append(" ");
+                }
             }
+
 
             lines.add(line.toString());
             start += wordCount;
+
             if (start < words.size() && words.get(start).equals("\n")) {
                 red = true;
                 start++;
             }
+            last = false;
         }
         return lines;
     }
