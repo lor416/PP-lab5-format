@@ -72,6 +72,9 @@ class File {
                 } else {
                     line.append(longWord.substring(0, currentWidth));
                     lines.add(line.toString());
+                    if (currentWidth < longWord.length()) {
+                        words.add(start + 1, longWord.substring(currentWidth));
+                    }
                 }
                 start++;
                 continue;
@@ -105,12 +108,12 @@ class File {
             if (wordCount == 0) {
                 break;
             }
+            // проверка на последнюю строку
             int nextIndex = start + wordCount;
             if (nextIndex >= words.size() || words.get(nextIndex).equals("\n")) {
                 last = true;
             }
             if (last) {
-                // Для последней строки - просто добавляем слова с обычными пробелами
                 line.append(words.get(start));
                 for (int i = 1; i < wordCount; i++) {
                     line.append(" ").append(words.get(start + i));

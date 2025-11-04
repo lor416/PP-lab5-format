@@ -24,9 +24,9 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Введите ширину: ");
         int width = scanner.nextInt();
-
+        if (width < 3)
+            throw new IllegalArgumentException("Ширина должна быть не меньше 3 символов");
         File file = new File();
-
         try {
             file.readWords();
             List<String> lines = file.formatText(width);
